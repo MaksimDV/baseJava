@@ -11,7 +11,6 @@ public class ArrayStorage {
     }
 
     Resume get(String uuid) {
-        System.out.println("IDEA and GIT association testing");
         return null;
     }
 
