@@ -3,25 +3,23 @@
  */
 public class ArrayStorage {
     Resume[] storage = new Resume[10000];
+    int arraySize = 0;
 
     void clear() {
-        for (int i = 0; i < storage.length; i++) {
+        for (int i = 0; i < arraySize; i++) {
             storage[i] = null;
         }
+        arraySize = 0;
     }
 
     void save(Resume r) {
-        for (int i = 0; i < storage.length; i++) {
-            if (storage[i] == null) {
-                storage[i] = r;
-                break;
-            }
-        }
+        storage[arraySize] = r;
+        arraySize++;
     }
 
     Resume get(String uuid) {
-        for (int i = 0; i < storage.length; i++) {
-            if (storage[i] != null && storage[i].uuid == uuid) {
+        for (int i = 0; i < arraySize; i++) {
+            if (storage[i].uuid == uuid) {
                 return storage[i];
             }
         }
@@ -29,39 +27,28 @@ public class ArrayStorage {
     }
 
     void delete(String uuid) {
-        for (int i = 0; i < storage.length; i++) {
-            if (storage[i] != null && storage[i].uuid == uuid) {
-                storage[i] = null;
+        for (int i = 0; i < arraySize; i++) {
+            if (storage[i].uuid == uuid) {
+                storage[i] = storage[arraySize - 1];
+                storage[arraySize - 1] = null;
+                arraySize--;
             }
         }
+    }
 
-        int nonNullIndex = 0;
-
-        for (int i = 0; i < storage.length; i++) {
-            if (storage[i] != null) {
-                storage[nonNullIndex++] = storage[i];
+        /**
+         * @return array, contains only Resumes in storage (without null)
+         */
+        Resume[] getAll () {
+            Resume[] filteredStorage = new Resume[arraySize];
+            for (int i = 0; i < arraySize; i++) {
+                filteredStorage[i] = storage[i];
             }
+
+            return filteredStorage;
         }
 
-        storage[nonNullIndex] = null;
-
-    }
-
-    /**
-     * @return array, contains only Resumes in storage (without null)
-     */
-    Resume[] getAll() {
-        return storage;
-    }
-
-    int size() {
-        int count = 0;
-        for (int i = 0; i < storage.length; i++) {
-            if (storage[i] == null) {
-                break;
-            }
-            count++;
+        int size() {
+            return arraySize;
         }
-        return count;
-    }
 }
