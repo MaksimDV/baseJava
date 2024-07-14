@@ -11,22 +11,14 @@ public class ArrayStorage {
     private final int STORAGE_LIMIT = 10000;
     private final Resume[] storage = new Resume[STORAGE_LIMIT];
     private int size = 0;
-    private final String EXIST_ERROR = " already exists in the storage";
-    private final String NOT_EXIST_ERROR = " does not exist in the storage";
-    private final String STORAGE_ERROR = "The storage is fully";
-
-    private int getIndex(String uuid) {
-        for (int i = 0; i < size; i++) {
-            if (storage[i].getUuid().equals(uuid)) {
-                return i;
-            }
-        }
-        return -1;
-    }
+    private String EXIST_ERROR = " already exists in the storage";
+    private String NOT_EXIST_ERROR = " does not exist in the storage";
+    private String STORAGE_ERROR = "The storage is fully";
 
     public void update(Resume resume) {
-        if (getIndex(resume.getUuid()) >= 0) {
-          
+        int index = getIndex(resume.getUuid());
+        if (index >= 0) {
+            storage[index] = resume;
         } else {
             System.out.println(resume.getUuid() + NOT_EXIST_ERROR);
         }
@@ -38,8 +30,7 @@ public class ArrayStorage {
     }
 
     public void save(Resume r) {
-
-        if (storage.length == size) {
+        if (STORAGE_LIMIT == size) {
             System.out.println(STORAGE_ERROR);
         } else if (getIndex(r.getUuid()) >= 0) {
             System.out.println(r.getUuid() + EXIST_ERROR);
@@ -49,7 +40,7 @@ public class ArrayStorage {
     }
 
     public Resume get(String uuid) {
-        int index = this.getIndex(uuid);
+        int index = getIndex(uuid);
         if (index >= 0) {
             return storage[index];
         } else {
@@ -59,7 +50,7 @@ public class ArrayStorage {
     }
 
     public void delete(String uuid) {
-        int index = this.getIndex(uuid);
+        int index = getIndex(uuid);
         if (index >= 0) {
             size--;
             storage[index] = storage[size];
@@ -73,11 +64,19 @@ public class ArrayStorage {
      * @return array, contains only Resumes in storage (without null)
      */
     public Resume[] getAll() {
-        Resume[] allResume = Arrays.copyOf(storage, size);
-        return allResume;
+        return Arrays.copyOf(storage, size);
     }
 
     public int size() {
         return size;
+    }
+
+    private int getIndex(String uuid) {
+        for (int i = 0; i < size; i++) {
+            if (storage[i].getUuid().equals(uuid)) {
+                return i;
+            }
+        }
+        return -1;
     }
 }
