@@ -26,7 +26,7 @@ public class ArrayStorage {
 
     public void update(Resume resume) {
         if (getIndex(resume.getUuid()) >= 0) {
-
+          
         } else {
             System.out.println(resume.getUuid() + NOT_EXIST_ERROR);
         }
