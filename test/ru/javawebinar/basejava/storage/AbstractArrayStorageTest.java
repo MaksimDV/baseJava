@@ -46,6 +46,7 @@ public abstract class AbstractArrayStorageTest {
         storage.update(resume1);
         Assert.assertTrue(resume1 == storage.get("uuid1"));
     }
+    //test
 
     @Test
     public void save() {
