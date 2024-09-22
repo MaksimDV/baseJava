@@ -27,7 +27,7 @@ public abstract class AbstractStorageTest {
     }
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         storage.clear();
         storage.save(RESUME_1);
         storage.save(RESUME_2);
