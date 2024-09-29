@@ -7,50 +7,50 @@ import java.util.Map;
 
 public class MapStorage extends AbstractStorage {
 
-    private Map<String, Resume> resumeMap = new HashMap<>();
+    private final Map<String, Resume> RESUME_MAP = new HashMap<>();
 
     @Override
     protected Object getKey(String uuid) {
-        return resumeMap.containsKey(uuid) ? uuid : null;
+        return uuid;
     }
 
     @Override
     protected void updateResume(Resume resume, Object key) {
-        resumeMap.put((String) key, resume);
+        RESUME_MAP.put((String) key, resume);
     }
 
     @Override
     protected void saveResume(Resume resume, Object key) {
-        resumeMap.put(resume.getUuid(), resume);
+        RESUME_MAP.put(resume.getUuid(), resume);
     }
 
     @Override
     protected Resume getResume(Object key) {
-        return resumeMap.get((String) key);
+        return RESUME_MAP.get((String) key);
     }
 
     @Override
     protected void deleteResume(Object key) {
-        resumeMap.remove((String) key);
+        RESUME_MAP.remove((String) key);
     }
 
     @Override
     protected boolean isExist(Object key) {
-        return key != null;
+        return RESUME_MAP.containsKey((String) key);
     }
 
     @Override
     public void clear() {
-        resumeMap.clear();
+        RESUME_MAP.clear();
     }
 
     @Override
     public Resume[] getAll() {
-        return resumeMap.values().toArray(new Resume[0]);
+        return RESUME_MAP.values().toArray(new Resume[0]);
     }
 
     @Override
     public int size() {
-        return resumeMap.size();
+        return RESUME_MAP.size();
     }
 }
