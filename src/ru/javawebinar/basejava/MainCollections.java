@@ -7,13 +7,16 @@ import java.util.*;
 public class MainCollections {
 
     private static final String UUID_1 = "uuid1";
-    private static final Resume RESUME_1 = new Resume(UUID_1);
+    private static final String FULL_NAME1 = "fullName1";
+    private static final Resume RESUME_1 = new Resume(UUID_1, FULL_NAME1);
 
     private static final String UUID_2 = "uuid2";
-    private static final Resume RESUME_2 = new Resume(UUID_2);
+    private static final String FULL_NAME2 = "fullName2";
+    private static final Resume RESUME_2 = new Resume(UUID_2, FULL_NAME2);
 
     private static final String UUID_3 = "uuid3";
-    private static final Resume RESUME_3 = new Resume(UUID_3);
+    private static final String FULL_NAME3 = "fullName3";
+    private static final Resume RESUME_3 = new Resume(UUID_3, FULL_NAME3);
 
     //private static final String UUID_4 = "uuid4";
     //private static final Resume RESUME_4 = new Resume(UUID_4);
@@ -56,7 +59,7 @@ public class MainCollections {
         }
 
         List<Resume> resumes = Arrays.asList(RESUME_1, RESUME_2, RESUME_3);
-        resumes.remove(1);
+        //resumes.remove(1);
         System.out.println(resumes);
     }
 }

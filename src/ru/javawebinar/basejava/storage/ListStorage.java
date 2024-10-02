@@ -3,16 +3,18 @@ package ru.javawebinar.basejava.storage;
 import ru.javawebinar.basejava.model.Resume;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
 
 public class ListStorage extends AbstractStorage {
-    private final List<Resume> RESUME_LIST = new ArrayList<>();
+    private final List<Resume> resumeList = new ArrayList<>();
 
 
     @Override
     protected Integer getKey(String uuid) {
-        for (int i = 0; i < RESUME_LIST.size(); i++) {
-            if (RESUME_LIST.get(i).getUuid().equals(uuid)) {
+        for (int i = 0; i < resumeList.size(); i++) {
+            if (resumeList.get(i).getUuid().equals(uuid)) {
                 return i;
             }
         }
@@ -21,22 +23,22 @@ public class ListStorage extends AbstractStorage {
 
     @Override
     protected void updateResume(Resume resume, Object key) {
-        RESUME_LIST.set((int) key, resume);
+        resumeList.set((int) key, resume);
     }
 
     @Override
     protected void saveResume(Resume resume, Object key) {
-        RESUME_LIST.add(resume);
+        resumeList.add(resume);
     }
 
     @Override
     protected Resume getResume(Object key) {
-        return RESUME_LIST.get((int) key);
+        return resumeList.get((int) key);
     }
 
     @Override
     protected void deleteResume(Object key) {
-        RESUME_LIST.remove((int) key);
+        resumeList.remove((int) key);
     }
 
     @Override
@@ -46,16 +48,23 @@ public class ListStorage extends AbstractStorage {
 
     @Override
     public void clear() {
-        RESUME_LIST.clear();
+        resumeList.clear();
     }
 
     @Override
-    public Resume[] getAll() {
-        return RESUME_LIST.toArray(new Resume[0]);
+    public List<Resume> getAllSorted() {
+        return Arrays.stream(resumeList.toArray(new Resume[0])).
+                sorted(Comparator.comparing(Resume::getFullName)).
+                toList();
     }
 
     @Override
     public int size() {
-        return RESUME_LIST.size();
+        return resumeList.size();
+    }
+
+    @Override
+    protected List<Resume> getList() {
+        return resumeList;
     }
 }
