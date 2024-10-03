@@ -7,7 +7,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
-public abstract class AbstractArrayStorage extends AbstractStorage {
+public abstract class AbstractArrayStorage extends AbstractStorage<Integer> {
     protected static final int STORAGE_LIMIT = 10000;
     protected final Resume[] storage = new Resume[STORAGE_LIMIT];
     protected int size = 0;
@@ -17,28 +17,28 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
     }
 
     @Override
-    protected Resume getResume(Object key) {
-        return storage[(int) key];
+    protected Resume getResume(Integer key) {
+        return storage[key];
     }
 
     @Override
-    protected void updateResume(Resume resume, Object key) {
-        storage[(int) key] = resume;
+    protected void updateResume(Resume resume, Integer key) {
+        storage[key] = resume;
     }
 
     @Override
-    protected void saveResume(Resume resume, Object key) {
+    protected void saveResume(Resume resume, Integer key) {
         if (STORAGE_LIMIT == size) {
             throw new StorageException("The storage is fully", resume.getUuid());
         } else {
-            addElement(resume, (int) key);
+            addElement(resume, key);
             size++;
         }
     }
 
     @Override
-    protected void deleteResume(Object key) {
-        removeElement((int) key);
+    protected void deleteResume(Integer key) {
+        removeElement(key);
         storage[--size] = null;
     }
 
@@ -54,8 +54,8 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
      */
 
     @Override
-    protected boolean isExist(Object key) {
-        return (int) key >= 0;
+    protected boolean isExist(Integer key) {
+        return key >= 0;
     }
 
     @Override

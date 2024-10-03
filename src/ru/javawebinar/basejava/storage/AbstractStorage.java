@@ -7,32 +7,46 @@ import ru.javawebinar.basejava.model.Resume;
 import java.util.Comparator;
 import java.util.List;
 
-public abstract class AbstractStorage implements Storage {
+public abstract class AbstractStorage<SK> implements Storage {
+
+    protected abstract SK getKey(String uuid);
+
+    protected abstract void updateResume(Resume resume, SK key);
+
+    protected abstract void saveResume(Resume resume, SK key);
+
+    protected abstract Resume getResume(SK key);
+
+    protected abstract void deleteResume(SK key);
+
+    protected abstract boolean isExist(SK key);
+
+    protected abstract List<Resume> getList();
 
     private static final Comparator<Resume> RESUME_COMPARATOR = Comparator.comparing(Resume::getFullName)
             .thenComparing(Resume::getUuid);
 
     @Override
     public Resume get(String uuid) {
-        Object key = getKeyIfNotExistException(uuid);
+        SK key = getKeyIfNotExistException(uuid);
         return getResume(key);
     }
 
     @Override
     public void update(Resume resume) {
-        Object key = getKeyIfNotExistException(resume.getUuid());
+        SK key = getKeyIfNotExistException(resume.getUuid());
         updateResume(resume, key);
     }
 
     @Override
     public void save(Resume resume) {
-        Object key = getKeyIfExistException(resume.getUuid());
+        SK key = getKeyIfExistException(resume.getUuid());
         saveResume(resume, key);
     }
 
     @Override
     public void delete(String uuid) {
-        Object key = getKeyIfNotExistException(uuid);
+        SK key = getKeyIfNotExistException(uuid);
         deleteResume(key);
     }
 
@@ -44,33 +58,19 @@ public abstract class AbstractStorage implements Storage {
                 .toList();
     }
 
-    private Object getKeyIfNotExistException(String uuid) {
-        Object key = getKey(uuid);
+    private SK getKeyIfNotExistException(String uuid) {
+        SK key = getKey(uuid);
         if(!isExist(key)) {
             throw new NotExistStorageException(uuid);
         }
         return key;
     }
 
-    private Object getKeyIfExistException(String uuid) {
-        Object key = getKey(uuid);
+    private SK getKeyIfExistException(String uuid) {
+        SK key = getKey(uuid);
         if(isExist(key)) {
             throw new ExistStorageException(uuid);
         }
         return key;
     }
-
-    protected abstract Object getKey(String uuid);
-
-    protected abstract void updateResume(Resume resume, Object key);
-
-    protected abstract void saveResume(Resume resume, Object key);
-
-    protected abstract Resume getResume(Object key);
-
-    protected abstract void deleteResume(Object key);
-
-    protected abstract boolean isExist(Object key);
-
-    protected abstract List<Resume> getList();
 }
