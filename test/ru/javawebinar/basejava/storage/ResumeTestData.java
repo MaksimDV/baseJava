@@ -44,7 +44,7 @@ public class ResumeTestData {
         ));
 
         resume.addSection(SectionType.EDUCATION, new OrganizationSection(
-                Arrays.asList(
+                Collections.singletonList(
                         new Organization("Университет 1", "https://university1.com",
                                 Collections.singletonList(
                                 new Position(LocalDate.of(2010, 9, 1), LocalDate.of(2014, 6, 1), "Студент", "Инженер программного обеспечения")))
