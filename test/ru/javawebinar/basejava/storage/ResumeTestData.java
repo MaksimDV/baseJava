@@ -4,6 +4,7 @@ import ru.javawebinar.basejava.model.*;
 
 import java.time.LocalDate;
 import java.util.Arrays;
+import java.util.Collections;
 
 public class ResumeTestData {
     public static Resume createResume (String uuid, String fullName) {
@@ -34,10 +35,10 @@ public class ResumeTestData {
         resume.addSection(SectionType.EXPERIENCE, new OrganizationSection(
                 Arrays.asList(
                         new Organization("Компания 1", "https://company1.com",
-                                Arrays.asList(
+                                Collections.singletonList(
                                 new Position(LocalDate.of(2019, 1, 1), LocalDate.now(), "Разработчик", "Разработка ПО"))),
                         new Organization("Компания 2", "https://company2.com",
-                                Arrays.asList(
+                                Collections.singletonList(
                                 new Position(LocalDate.of(2015, 3, 1), LocalDate.of(2018, 12, 1), "Старший разработчик", "Разработка и поддержка систем")))
                 )
         ));
@@ -45,7 +46,7 @@ public class ResumeTestData {
         resume.addSection(SectionType.EDUCATION, new OrganizationSection(
                 Arrays.asList(
                         new Organization("Университет 1", "https://university1.com",
-                                Arrays.asList(
+                                Collections.singletonList(
                                 new Position(LocalDate.of(2010, 9, 1), LocalDate.of(2014, 6, 1), "Студент", "Инженер программного обеспечения")))
                 )
         ));
