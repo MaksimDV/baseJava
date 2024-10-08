@@ -41,7 +41,9 @@ public abstract class AbstractFileStorage extends AbstractStorage<File> {
     @Override
     protected void saveResume(Resume resume, File file) {
         try {
-            file.createNewFile();
+            if(!file.createNewFile()) {
+                throw new StorageException("File already exist", file.getName());
+            }
             writeResume(resume, file);
         } catch (IOException e) {
             throw new StorageException("IO error", file.getName(), e);
