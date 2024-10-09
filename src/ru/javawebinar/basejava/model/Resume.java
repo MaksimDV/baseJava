@@ -2,6 +2,7 @@ package ru.javawebinar.basejava.model;
 
 import java.util.EnumMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.UUID;
 
 /**
@@ -21,6 +22,8 @@ public class Resume {
     }
 
     public Resume(String uuid, String fullName) {
+        Objects.requireNonNull(fullName, "Full name must not be Null");
+        Objects.requireNonNull(uuid, "UUID must not be Null");
         this.uuid = uuid;
         this.fullName = fullName;
     }
@@ -65,5 +68,13 @@ public class Resume {
         int result = uuid.hashCode();
         result = 31 * result + fullName.hashCode();
         return result;
+    }
+
+    public void addContact(ContactType contactType, String contact) {
+        contacts.put(contactType, contact);
+    }
+
+    public  void addSection(SectionType sectionType, Section section) {
+        sections.put(sectionType, section);
     }
 }

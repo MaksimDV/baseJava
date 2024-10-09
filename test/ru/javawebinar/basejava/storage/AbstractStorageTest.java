@@ -11,22 +11,24 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+import static ru.javawebinar.basejava.storage.ResumeTestData.createResume;
+
 
 public abstract class AbstractStorageTest {
 
     protected final Storage storage;
     private static final String UUID_1 = "uuid1";
     private static final String FULL_NAME1 = "fullName1";
-    private static final Resume RESUME_1 = new Resume(UUID_1, FULL_NAME1);
+    private static final Resume RESUME_1 = createResume(UUID_1, FULL_NAME1);
     private static final String UUID_2 = "uuid2";
     private static final String FULL_NAME2 = "fullName2";
-    private static final Resume RESUME_2 = new Resume(UUID_2, FULL_NAME2);
+    private static final Resume RESUME_2 = createResume(UUID_2, FULL_NAME2);
     private static final String UUID_3 = "uuid3";
     private static final String FULL_NAME3 = "fullName3";
-    private static final Resume RESUME_3 = new Resume(UUID_3, FULL_NAME3);
+    private static final Resume RESUME_3 = createResume(UUID_3, FULL_NAME3);
     private static final String UUID_4 = "uuid4";
     private static final String FULL_NAME4 = "fullName4";
-    private static final Resume RESUME_4 = new Resume(UUID_4, FULL_NAME4);
+    private static final Resume RESUME_4 = createResume(UUID_4, FULL_NAME4);
     private static final String NOT_EXISTED_UUID = "dummy";
 
     public AbstractStorageTest(Storage storage) {
