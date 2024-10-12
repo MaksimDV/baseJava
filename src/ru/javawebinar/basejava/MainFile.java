@@ -3,23 +3,25 @@ package ru.javawebinar.basejava;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.util.Objects;
 
 public class MainFile {
 
-    public static void showAllFiles (File file) throws IOException {
-        if (file.isDirectory()) {
-            System.out.println("\n" + file.getCanonicalFile());
-            for (String name : Objects.requireNonNull(file.list())) {
-                String nestedDirPath = file.getAbsolutePath() + "/" + name;
-                File nestedFile = new File(nestedDirPath);
+    public static void showAllFilesDeeply(File file, int space) {
+        for (int i = 0; i < space; i++) {
+            System.out.print("   ");
+        }
 
-                if (nestedFile.isDirectory()) {
-                    showAllFiles(nestedFile);
-                } else {
-                    System.out.println(name);
-                }
+        if (file.isDirectory()) {
+            System.out.println("|-- [Dir] " + file.getName());
+        } else {
+            System.out.println("|-- [File] " + file.getName());
+        }
+
+        if (file.isDirectory()) {
+            for (File itr : file.listFiles()) {
+                showAllFilesDeeply(itr, space + 1);
             }
+
         }
     }
 
@@ -51,7 +53,7 @@ public class MainFile {
         File root = new File("/Users/maksimd/dev/basejava/src");
         System.out.println(root);
 
-        showAllFiles(root);
+        showAllFilesDeeply(root, 0);
 
     }
 }
