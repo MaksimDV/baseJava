@@ -1,9 +1,14 @@
 package ru.javawebinar.basejava.model;
 
+import ru.javawebinar.basejava.util.DateUtil;
+
 import java.io.Serial;
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.time.Month;
 import java.util.Objects;
+
+import static ru.javawebinar.basejava.util.DateUtil.NOW;
 
 public class Position implements Serializable {
     @Serial
@@ -12,6 +17,14 @@ public class Position implements Serializable {
     private final LocalDate endDate;
     private final String title;
     private final String description;
+
+    public Position(int startYear, Month startMonth, String title, String description) {
+        this(DateUtil.of(startYear, startMonth), NOW, title, description);
+    }
+
+    public Position(int startYear, Month startMonth, int endYear, Month endMonth, String title, String description) {
+        this(DateUtil.of(startYear, startMonth), DateUtil.of(endYear, endMonth), title, description);
+    }
 
     public Position(LocalDate startDate, LocalDate endDate, String title, String description) {
         Objects.requireNonNull(startDate, "startDate must not be NULL");

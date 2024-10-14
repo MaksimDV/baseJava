@@ -1,6 +1,7 @@
 package ru.javawebinar.basejava.model;
 
 import java.io.Serializable;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
@@ -8,9 +9,12 @@ public class Organization implements Serializable {
     private final Link homePage;
     private final List<Position> positions;
 
-    public Organization(String name, String url, List<Position> positions) {
+    public Organization(String name, String url, Position... positions) {
+        this(new Link(name, url), Arrays.asList(positions));
+    }
+    public Organization(Link homePage, List<Position> positions) {
         Objects.requireNonNull(positions, "Positions must not be NULL");
-        this.homePage = new Link(name, url);
+        this.homePage = homePage;
         this.positions = positions;
     }
 
