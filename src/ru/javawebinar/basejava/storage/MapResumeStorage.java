@@ -33,12 +33,12 @@ public class MapResumeStorage extends AbstractStorage<Resume> {
 
     @Override
     protected void deleteResume(Resume resume) {
-        resumeMap.remove((resume).getUuid());
+        resumeMap.remove(resume.getUuid());
     }
 
     @Override
     protected boolean isExist(Resume resume) {
-        return resume != null && resumeMap.containsKey((resume).getUuid());
+        return resume != null;
     }
 
     @Override

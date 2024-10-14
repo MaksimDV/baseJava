@@ -18,7 +18,7 @@ public class MapUuidStorage extends AbstractStorage<String> {
 
     @Override
     protected void updateResume(Resume resume, String key) {
-        resumeMap.put((String) key, resume);
+        resumeMap.put(key, resume);
     }
 
     @Override
@@ -28,17 +28,17 @@ public class MapUuidStorage extends AbstractStorage<String> {
 
     @Override
     protected Resume getResume(String key) {
-        return resumeMap.get((String) key);
+        return resumeMap.get(key);
     }
 
     @Override
     protected void deleteResume(String key) {
-        resumeMap.remove((String) key);
+        resumeMap.remove(key);
     }
 
     @Override
     protected boolean isExist(String key) {
-        return resumeMap.containsKey((String) key);
+        return resumeMap.containsKey(key);
     }
 
     @Override

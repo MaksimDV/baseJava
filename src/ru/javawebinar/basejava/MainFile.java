@@ -6,8 +6,8 @@ import java.io.IOException;
 
 public class MainFile {
 
-    public static void showAllFilesDeeply(File file, int space) {
-        for (int i = 0; i < space; i++) {
+    public static void showAllFilesDeeply(File file, int dirPosition) {
+        for (int i = 0; i < dirPosition; i++) {
             System.out.print("   ");
         }
 
@@ -19,7 +19,7 @@ public class MainFile {
 
         if (file.isDirectory()) {
             for (File itr : file.listFiles()) {
-                showAllFilesDeeply(itr, space + 1);
+                showAllFilesDeeply(itr, dirPosition + 1);
             }
 
         }
