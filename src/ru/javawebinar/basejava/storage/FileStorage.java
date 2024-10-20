@@ -2,21 +2,20 @@ package ru.javawebinar.basejava.storage;
 
 import ru.javawebinar.basejava.exception.StorageException;
 import ru.javawebinar.basejava.model.Resume;
+import ru.javawebinar.basejava.storage.serializationStrategy.SerializationStrategy;
 
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public abstract class AbstractFileStorage extends AbstractStorage<File> {
-    private File directory;
+public class FileStorage extends AbstractStorage<File> {
+    private final File directory;
+    private final SerializationStrategy strategy;
 
-    protected abstract void writeResume(Resume r, OutputStream os) throws IOException;
-
-    protected abstract Resume readResume(InputStream is) throws IOException;
-
-    public AbstractFileStorage(File directory) {
+    public FileStorage(File directory, SerializationStrategy strategy) {
         Objects.requireNonNull(directory, "Directory must not be NULL");
+        this.strategy = strategy;
         if (!directory.isDirectory()) {
             throw new IllegalArgumentException(directory.getAbsolutePath() + " is not directory");
         }
@@ -35,7 +34,7 @@ public abstract class AbstractFileStorage extends AbstractStorage<File> {
     @Override
     protected void updateResume(Resume resume, File file) {
         try {
-            writeResume(resume, new BufferedOutputStream(new FileOutputStream(file)));
+            strategy.writeResume(resume, new BufferedOutputStream(new FileOutputStream(file)));
         } catch (IOException e) {
             throw new StorageException("IO error", file.getName(), e);
         }
@@ -47,16 +46,16 @@ public abstract class AbstractFileStorage extends AbstractStorage<File> {
             if (!file.createNewFile()) {
                 throw new StorageException("File already exist", file.getName());
             }
-            updateResume(resume, file);
         } catch (IOException e) {
             throw new StorageException("IO error", file.getName(), e);
         }
+        updateResume(resume, file);
     }
 
     @Override
     protected Resume getResume(File file) {
         try {
-            return readResume(new BufferedInputStream(new FileInputStream(file)));
+            return strategy.readResume(new BufferedInputStream(new FileInputStream(file)));
         } catch (IOException e) {
             throw new StorageException("IO error", file.getName(), e);
         }

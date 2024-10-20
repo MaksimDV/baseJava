@@ -3,6 +3,7 @@ package ru.javawebinar.basejava;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.Objects;
 
 public class MainFile {
 
@@ -18,7 +19,7 @@ public class MainFile {
         }
 
         if (file.isDirectory()) {
-            for (File itr : file.listFiles()) {
+            for (File itr : Objects.requireNonNull(file.listFiles())) {
                 showAllFilesDeeply(itr, dirPosition + 1);
             }
 
