@@ -2,26 +2,25 @@ package ru.javawebinar.basejava.storage;
 
 import ru.javawebinar.basejava.exception.StorageException;
 import ru.javawebinar.basejava.model.Resume;
+import ru.javawebinar.basejava.storage.serializationStrategy.SerializationStrategy;
 
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public abstract class AbstractPathStorage extends AbstractStorage<Path> {
-    private Path directory;
+public class PathStorage extends AbstractStorage<Path> {
+    private final Path directory;
+    private final SerializationStrategy strategy;
 
-    protected abstract void writeResume(Resume r, OutputStream os) throws IOException;
-
-    protected abstract Resume readResume(InputStream is) throws IOException;
-
-    public AbstractPathStorage(String dir) {
+    public PathStorage(String dir, SerializationStrategy strategy) {
         directory = Paths.get(dir);
         Objects.requireNonNull(directory, "Directory must not be NULL");
+        this.strategy = strategy;
         if (!Files.isDirectory(directory) || !Files.isWritable(directory)) {
             throw new IllegalArgumentException(dir + " is not directory or  is not writable");
         }
@@ -35,7 +34,7 @@ public abstract class AbstractPathStorage extends AbstractStorage<Path> {
     @Override
     protected void updateResume(Resume resume, Path path) {
         try {
-            writeResume(resume, new BufferedOutputStream(Files.newOutputStream(path)));
+            strategy.writeResume(resume, new BufferedOutputStream(Files.newOutputStream(path)));
         } catch (IOException e) {
             throw new StorageException("IO error", path.getFileName().toString(), e);
         }
@@ -47,16 +46,16 @@ public abstract class AbstractPathStorage extends AbstractStorage<Path> {
             if (Files.notExists(path)) {
                 Files.createFile(path);
             }
-            updateResume(resume, path);
         } catch (IOException e) {
             throw new StorageException("IO error", path.getFileName().toString(), e);
         }
+        updateResume(resume, path);
     }
 
     @Override
     protected Resume getResume(Path path) {
         try {
-            return readResume(new BufferedInputStream(Files.newInputStream(path)));
+            return strategy.readResume(new BufferedInputStream(Files.newInputStream(path)));
         } catch (IOException e) {
             throw new StorageException("IO error", path.getFileSystem().toString(), e);
         }
@@ -78,32 +77,24 @@ public abstract class AbstractPathStorage extends AbstractStorage<Path> {
 
     @Override
     protected List<Resume> getList() {
-        List<Resume> resumes = new ArrayList<>();
-        try (Stream<Path> paths = Files.list(directory)) {
-            paths.forEach(path -> resumes.add(getResume(path)));
-        } catch (IOException e) {
-            throw new StorageException("Directory read error", directory.getFileName().toString(), e);
-        }
-        return resumes;
+        return getDirectoryFiles(directory).stream().map(this::getResume).collect(Collectors.toList());
     }
 
     @Override
     public void clear() {
-        try (Stream<Path> paths = Files.list(directory)) {
-            paths.forEach(this::deleteResume);
-        } catch (IOException e) {
-            throw new StorageException("Path delete error", directory.getFileSystem().toString(), e);
-        }
-
+        getDirectoryFiles(directory).forEach(this::deleteResume);
     }
 
     @Override
     public int size() {
-        try (Stream<Path> paths = Files.list(directory)) {
-            return (int) paths.count();
-        } catch (IOException e) {
-            throw new StorageException("Directory size error", directory.getFileName().toString(), e);
-        }
+        return getDirectoryFiles(directory).size();
+    }
 
+    private List<Path> getDirectoryFiles(Path directory) {
+        try (Stream<Path> paths = Files.list(directory)) {
+            return paths.collect(Collectors.toList());
+        } catch (IOException e) {
+            throw new StorageException("Directory operation error", directory.getFileName().toString(), e);
+        }
     }
 }
