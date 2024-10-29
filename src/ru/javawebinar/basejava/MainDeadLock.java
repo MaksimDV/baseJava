@@ -2,21 +2,38 @@ package ru.javawebinar.basejava;
 
 public class MainDeadLock {
 
-    public static Thread thread1;
-    public static Thread thread2;
-
+    public static final Object firstLock = new Object();
+    public static final Object secondLock = new Object();
 
     public static void main(String[] args) {
-        thread1 = new Thread(() -> {
-            System.out.println("First thread was started");
-            thread2.start();
+
+        Thread thread1 = new Thread(() -> {
+            synchronized (firstLock) {
+                System.out.println(Thread.currentThread().getName() + " was started");
+                try {
+                    Thread.sleep(100);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+                synchronized (secondLock) {
+                    System.out.println(Thread.currentThread().getName() + " was finished");
+                }
+            }
         });
 
-        thread2 = new Thread(() -> {
-            System.out.println("Second thread was started");
-            thread1.start();
+        Thread thread2 = new Thread(() -> {
+            synchronized (secondLock) {
+                System.out.println(Thread.currentThread().getName() + " was started");
+                try {
+                    Thread.sleep(100);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+                synchronized (firstLock) {
+                    System.out.println(Thread.currentThread().getName() + " was finished");
+                }
+            }
         });
-
 
         thread1.start();
         thread2.start();
