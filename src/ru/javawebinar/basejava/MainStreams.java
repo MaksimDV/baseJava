@@ -3,6 +3,7 @@ package ru.javawebinar.basejava;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 public class MainStreams {
@@ -14,12 +15,13 @@ public class MainStreams {
     }
 
     public static List<Integer> oddOrEven(List<Integer> integers) {
-        long oddCount = integers.stream().filter(n -> n % 2 != 0).count();
 
-        return integers.stream()
-                .filter(n -> (oddCount % 2 == 0) == (n % 2 != 0))
-                .collect(Collectors.toList());
+        Map<Boolean, List<Integer>> partitioned = integers.stream()
+                .collect(Collectors.partitioningBy(num -> num % 2 == 0));
+
+        return partitioned.get(partitioned.get(false).size() % 2 != 0);
     }
+
     public static void main(String[] args) {
         int[] array1 = {1,2,3,3,2,3};
         int[] array2 = {9,8};
