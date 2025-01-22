@@ -3,14 +3,13 @@ package ru.javawebinar.basejava.storage;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import ru.javawebinar.basejava.Config;
 import ru.javawebinar.basejava.exception.ExistStorageException;
 import ru.javawebinar.basejava.exception.NotExistStorageException;
 import ru.javawebinar.basejava.model.Resume;
 
 import java.io.File;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 import static ru.javawebinar.basejava.storage.ResumeTestData.createResume;
 
@@ -18,17 +17,17 @@ import static ru.javawebinar.basejava.storage.ResumeTestData.createResume;
 public abstract class AbstractStorageTest {
 
     protected final Storage storage;
-    protected static final File STORAGE_DIR = new File("/Users/maksimd/dev/basejava/storage");
-    private static final String UUID_1 = "uuid1";
+    protected static final File STORAGE_DIR = Config.get().getStorageDir();
+    private static final String UUID_1 = UUID.randomUUID().toString();
     private static final String FULL_NAME1 = "fullName1";
     private static final Resume RESUME_1 = createResume(UUID_1, FULL_NAME1);
-    private static final String UUID_2 = "uuid2";
+    private static final String UUID_2 = UUID.randomUUID().toString();
     private static final String FULL_NAME2 = "fullName2";
     private static final Resume RESUME_2 = createResume(UUID_2, FULL_NAME2);
-    private static final String UUID_3 = "uuid3";
+    private static final String UUID_3 = UUID.randomUUID().toString();
     private static final String FULL_NAME3 = "fullName3";
     private static final Resume RESUME_3 = createResume(UUID_3, FULL_NAME3);
-    private static final String UUID_4 = "uuid4";
+    private static final String UUID_4 = UUID.randomUUID().toString();
     private static final String FULL_NAME4 = "fullName4";
     private static final Resume RESUME_4 = createResume(UUID_4, FULL_NAME4);
     private static final String NOT_EXISTED_UUID = "dummy";
